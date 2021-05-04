@@ -36,25 +36,41 @@ window.addEventListener('DOMContentLoaded',function(){
     }
     }
     function convert(id){
+        // if(typeof id =="string"){
         let index=id[0]
         index=index.charCodeAt(0)
         index-=65;
         let li=[index,id[1]-1]
         return li
+        // }
+        // return id
     }
-    function check(id,p){
-        index=convert(id);
+    function check(id,p,flag=0){
+        index=id;
         console.log(index[0])
         if(board[index[0]][index[1]]!==0&&((Math.abs(p[0]-index[0])==1&&Math.abs(p[1]-index[1])==2)||(Math.abs(p[0]-index[0])==2&&Math.abs(p[1]-index[1])==1)))
-        {
-            board[index[0]][index[1]]=0
+        {   if(flag==1)
+                board[index[0]][index[1]]=0
             console.log("valid")
             return 1;
         }
 
         return 0;
     }
+    function options(p){
+        console.log(p)
+           let op=0,i=convert(p);
+            let id=[[i[0]-2,i[0]-1],[i[0]-2,i[0]+1],[i[0]+2,i[0]-1],[i[0]+2,i[0]+1],[i[0]-1,i[0]-2],[i[0]-1,i[0]+2],[i[0]+1,i[0]-2],[i[0]+1,i[0]+2]]
+           id.forEach(element => {
+               if(check(element,convert(p)))
+                 op+=1;
+               
+           });
+           console.log(op)
+           return op;
+    }
     function setbox(p){
+      
         let box=document.getElementById(p);
         box.style.border="5px solid rgb(45, 165, 235)";
         box.style.boxShadow="0 0 15px #0463b1";
@@ -66,6 +82,7 @@ window.addEventListener('DOMContentLoaded',function(){
         box.style.boxShadow="";
 
     }
+
     container.appendChild(table)
     let elements=document.querySelectorAll("td.box");
     for( i of elements){
@@ -79,15 +96,15 @@ window.addEventListener('DOMContentLoaded',function(){
                     console.log("Fdf")
                     player1=id;
                     let box=event.target;
-                box.innerHTML="&#9816"
+                    box.innerHTML="&#9816"
                 // box.style.border="5px solid rgb(45, 165, 235)";
-                box.style.boxShadow="0 0 15px #0463b1";
-                setTimeout(()=>{
+                    box.style.boxShadow="0 0 15px #0463b1";
+                    setTimeout(()=>{
                     box.style.border="";
                     box.style.boxShadow="";
-                },1000)
+                    },1000)
                 }
-                else if(check(id,convert(player1))){
+                else if(check(convert(id),convert(player1),1),1){
                     unsetbox(player1)
                     player1=id //prev
                     let box=event.target;
@@ -132,7 +149,7 @@ window.addEventListener('DOMContentLoaded',function(){
                     setbox(player1)
 
                 }
-                else if(check(id,convert(player2))){
+                else if(check(convert(id),convert(player2),1)){
                     unsetbox(player2)
                     player2=id;
                     let box=event.target;
@@ -145,7 +162,7 @@ window.addEventListener('DOMContentLoaded',function(){
                         box.style.boxShadow="";
                     },1000)
                     setbox(player1)
-
+                    
                 } else{
                     let box=event.target;
                     box.style.border="5px solid rgb(255, 0, 0)";
@@ -164,7 +181,7 @@ window.addEventListener('DOMContentLoaded',function(){
             
         
             
-        });
+        });   //end event
     }
 
     
