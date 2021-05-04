@@ -104,7 +104,7 @@ window.addEventListener('DOMContentLoaded',function(){
                     box.style.boxShadow="";
                     },1000)
                 }
-                else if(check(convert(id),convert(player1),1),1){
+                else if(check(convert(id),convert(player1),1)){
                     unsetbox(player1)
                     player1=id //prev
                     let box=event.target;
