@@ -21,14 +21,14 @@ window.addEventListener('DOMContentLoaded',function(){
         col=document.createElement("td");
         if(i%2!=0&&j%2==0)
         {
-        col.style.backgroundColor="black"
+        col.style.backgroundColor="white"
         }else if(i%2==0&&j%2==1){
-            col.style.backgroundColor="black"
+            col.style.backgroundColor="white"
            
             
            
         }else{
-            col.style.backgroundColor="white"
+            col.style.backgroundColor="black"
         } 
         col.setAttribute("id",String.fromCharCode(j)+(Math.abs(i-8)))
         col.setAttribute("class","box")
@@ -48,6 +48,12 @@ window.addEventListener('DOMContentLoaded',function(){
         // }
         // return id
     }
+    function revert(p){
+        let index=p[1]+65
+        index=String.fromCharCode(index);
+        row=Math.abs(p[0]-8)
+        return index+row;
+    }
     function check(id,p,flag=0){
         index=id;
         console.log(index[0])
@@ -61,14 +67,28 @@ window.addEventListener('DOMContentLoaded',function(){
         return 0;
     }
     function options(p){
-        console.log(p)
+            let li=[];
            let op=0,i=convert(p);
             let id=[[i[0]-2,i[1]-1],[i[0]-2,i[1]+1],[i[0]+2,i[1]-1],[i[0]+2,i[1]+1],[i[0]-1,i[1]-2],[i[0]-1,i[1]+2],[i[0]+1,i[1]-2],[i[0]+1,i[1]+2]]
            id.forEach(element => {
                console.log(i+" "+element)
 
                if((element[0]>=0&&element[0]<8)&&(element[1]>=0&&element[1]<8)&&check(element,i,0))
-                  op++;
+                  {
+                      op++;
+                      let box=document.getElementById(revert(element))
+                     box.style.border="5px solid rgb(100, 255, 100)";
+                     li.push(box); 
+                     box.style.boxShadow="0 0 50px #00ff00"
+                      box.addEventListener("click",()=>{
+                         for(i=0;i<li.length;i++){
+                            box=li[i];
+                            box.style.border="";
+                            box.style.boxShadow="";
+                         } 
+                            
+                      })
+                  }
            });
            console.log(op)
            return op;
@@ -107,6 +127,8 @@ window.addEventListener('DOMContentLoaded',function(){
                     box.style.border="";
                     box.style.boxShadow="";
                     },1000)
+                    let t=convert(id);
+                    board[t[0]][t[1]]=0;
                 }
                 else if(check(convert(id),convert(player1),1)){
                     unsetbox(player1)
@@ -125,7 +147,7 @@ window.addEventListener('DOMContentLoaded',function(){
                         b.style.backgroundColor="pink"
                         b.style.border="5px solid rgb(255, 102, 120)";
                         b.style.boxShadow="0 0 15px #FF0000";
-                        alert("Player1 won");
+                        document.getElementById("info").innerHTML="Team Red Won"
                     }
                 }
                 else{
@@ -158,6 +180,7 @@ window.addEventListener('DOMContentLoaded',function(){
                         box.style.boxShadow="";
                     },1000)
                     setbox(player1)
+                    options(player1)
 
                 }
                 else if(check(convert(id),convert(player2),1)){
@@ -178,7 +201,7 @@ window.addEventListener('DOMContentLoaded',function(){
                         b.style.backgroundColor="pink"
                         b.style.border="5px solid rgb(255, 102, 120)";
                         b.style.boxShadow="0 0 15px #FF0000";
-                        alert("Player2 won");
+                        document.getElementById("info").innerHTML="Team Blue Won"
                     }
                 } else{
                     let box=event.target;
@@ -201,7 +224,8 @@ window.addEventListener('DOMContentLoaded',function(){
             
         });   //end event
     }
-
-    
+    document.getElementById("reset").addEventListener("click",()=>{
+        window.location.reload();
+    })
     
 })
