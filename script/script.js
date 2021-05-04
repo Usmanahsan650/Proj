@@ -40,7 +40,10 @@ window.addEventListener('DOMContentLoaded',function(){
         let index=id[0]
         index=index.charCodeAt(0)
         index-=65;
-        let li=[index,id[1]-1]
+        
+        row=Math.abs(id[1]-8)
+    
+        let li=[row,index]
         return li
         // }
         // return id
@@ -60,11 +63,12 @@ window.addEventListener('DOMContentLoaded',function(){
     function options(p){
         console.log(p)
            let op=0,i=convert(p);
-            let id=[[i[0]-2,i[0]-1],[i[0]-2,i[0]+1],[i[0]+2,i[0]-1],[i[0]+2,i[0]+1],[i[0]-1,i[0]-2],[i[0]-1,i[0]+2],[i[0]+1,i[0]-2],[i[0]+1,i[0]+2]]
+            let id=[[i[0]-2,i[1]-1],[i[0]-2,i[1]+1],[i[0]+2,i[1]-1],[i[0]+2,i[1]+1],[i[0]-1,i[1]-2],[i[0]-1,i[1]+2],[i[0]+1,i[1]-2],[i[0]+1,i[1]+2]]
            id.forEach(element => {
-               if(check(element,convert(p)))
-                 op+=1;
-               
+               console.log(i+" "+element)
+
+               if((element[0]>=0&&element[0]<8)&&(element[1]>=0&&element[1]<8)&&check(element,i,0))
+                  op++;
            });
            console.log(op)
            return op;
@@ -104,7 +108,7 @@ window.addEventListener('DOMContentLoaded',function(){
                     box.style.boxShadow="";
                     },1000)
                 }
-                else if(check(convert(id),convert(player1),1),1){
+                else if(check(convert(id),convert(player1),1)){
                     unsetbox(player1)
                     player1=id //prev
                     let box=event.target;
@@ -116,6 +120,13 @@ window.addEventListener('DOMContentLoaded',function(){
                     box.style.boxShadow="";
                     },1000)
                     setbox(player2)
+                    if(options(player2)==0){
+                        let b=document.getElementById(player2)
+                        b.style.backgroundColor="pink"
+                        b.style.border="5px solid rgb(255, 102, 120)";
+                        b.style.boxShadow="0 0 15px #FF0000";
+                        alert("Player1 won");
+                    }
                 }
                 else{
                     
@@ -162,7 +173,13 @@ window.addEventListener('DOMContentLoaded',function(){
                         box.style.boxShadow="";
                     },1000)
                     setbox(player1)
-                    
+                    if(options(player1)==0){
+                        let b=document.getElementById(player1)
+                        b.style.backgroundColor="pink"
+                        b.style.border="5px solid rgb(255, 102, 120)";
+                        b.style.boxShadow="0 0 15px #FF0000";
+                        alert("Player2 won");
+                    }
                 } else{
                     let box=event.target;
                     box.style.border="5px solid rgb(255, 0, 0)";
@@ -173,6 +190,7 @@ window.addEventListener('DOMContentLoaded',function(){
                     setbox(player2)
                     },1000)
                     count-=1
+                  
                 }
                 
             }
