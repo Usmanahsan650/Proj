@@ -181,6 +181,8 @@ window.addEventListener('DOMContentLoaded',function(){
                     },1000)
                     setbox(player1)
                     options(player1)
+                    let t=convert(id);
+                    board[t[0]][t[1]]=0
 
                 }
                 else if(check(convert(id),convert(player2),1)){
