@@ -34,7 +34,12 @@ window.addEventListener('DOMContentLoaded',function(){
         col.setAttribute("class","box")
         row.appendChild(col);
     }
-    }
+    } 
+
+//logic 
+document.getElementById("hint").addEventListener("click",()=>{
+    console.log("Next step")
+})
     function convert(id){
         // if(typeof id =="string"){
         let index=id[0]
