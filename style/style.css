@@ -58,7 +58,7 @@ td{
         /* border: 5px solid rgb(45, 165, 235)!important; */
     /* box-shadow: 0 0 15px #0463b1; */
 #hint{
-    content: url("../images/q.jpg");
+    background-color:white;
     width: 50px;
     height: 50px;
     align-self: center;
