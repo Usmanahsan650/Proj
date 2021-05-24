@@ -147,7 +147,10 @@ document.getElementById("hint").addEventListener("click",()=>{
     }
     let p1=convert(player1)
     let p2=convert(player2)
+    if(count%2==0)
     console.log(max(p1,p2,grid))
+    else
+    console.log(max(p2,p1,grid))
     console.log(move)
     hint(move)
     // printgr(board)
