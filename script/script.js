@@ -51,10 +51,12 @@ function printgr(g){
     console.log("\n")
     }
 }
-function max(pos,pos2,grid){
+function max(pos,pos2,grid,alpha,beta){
+    // let alpha=Number.MIN_SAFE_INTEGER
+    // let beta=Number.MAX_SAFE_INTEGER
     console.log("pass 1")
         if(isTerminal(pos,pos2,grid)){
-            console.log("pass 3")
+            console.log("max util",utility(pos,pos2,grid))
             return utility(pos,pos2,grid)
         }
         else{
@@ -64,17 +66,29 @@ function max(pos,pos2,grid){
             let max=new Array(2);
             
             max[0]=0
+            max[1]=8
             id.forEach(element => {
-                console.log(element)
+                console.log(element,alpha,beta)
+                if(alpha>=beta){
+                    console.log("pruned")
+                    return max;
+                }
                 // console.log(checkT(element,pos,grid))
                 if((element[0]>=0&&element[0]<8)&&(element[1]>=0&&element[1]<8)&&checkT(element,pos,grid)){
                     console.log("pass 5")
-                    let t=min(element,pos2,grid)
+                    
+                    
+                    
+                    grid[element[0]][element[1]]=0
+                    let t=min(element,pos2,grid,alpha,beta)
+                    if(t[0]>alpha)
+                     alpha=t[0]
                     if(t[0]>max[0]){
                         console.log(t)
                         max=t
                         move=element
-                        
+                        alpha=max[0]
+
                     }
                 }
                 
@@ -82,11 +96,12 @@ function max(pos,pos2,grid){
         return max
     }
     }
-    function min(pos,pos2,grid){
+    function min(pos,pos2,grid,alpha,beta){
         console.log("min")
         if(isTerminal(pos,pos2,grid)){
-            console.log(utility(pos,pos2,grid))
+            console.log("min util",utility(pos,pos2,grid))
             return utility(pos,pos2,grid)
+
         }
         else{
             let i=pos2
@@ -95,12 +110,23 @@ function max(pos,pos2,grid){
             min=[8,8]
 
             id.forEach(element => {
+                console.log(element,alpha,beta)
                 if((element[0]>=0&&element[0]<8)&&(element[1]>=0&&element[1]<8)&&checkT(element,pos,grid)){
-                    let t=max(pos,element,grid)
-                
+                    if(alpha>=beta)
+                    {
+                        console.log("pruned")
+                        return min;
+                    }
+                    
+                    grid[element[0]][element[1]]=0
+                    let t=max(pos,element,grid,alpha,min[0])
+                    if(min[0]<beta)
+                    beta=t[0]
+                     console.log("Here",t[0],t[1])
                     if(t[0]<min[0]){
                         console.log(t)
                         min=t;
+                        beta=min[0];
                     }
                 }
                 
@@ -121,9 +147,9 @@ function max(pos,pos2,grid){
         }
     }
     function utility(pos,pos2,grid){
-        let t=Array(2);
+        let t=[];
         t.push(optionsT(pos,grid))
-        t.push(pos2,grid)
+        t.push(optionsT(pos2,grid))
         return t;
 
     }
@@ -148,10 +174,11 @@ document.getElementById("hint").addEventListener("click",()=>{
     let p1=convert(player1)
     let p2=convert(player2)
     if(count%2==0)
-    console.log(max(p1,p2,grid))
+    console.log(p1,p2,max(p1,p2,grid,Number.MIN_SAFE_INTEGER,4))
     else
-    console.log(max(p2,p1,grid))
+    console.log(p2,p1,max(p2,p1,grid,Number.MIN_SAFE_INTEGER,Number.MAX_SAFE_INTEGER))
     console.log(move)
+    
     hint(move)
     // printgr(board)
 
@@ -180,21 +207,21 @@ document.getElementById("hint").addEventListener("click",()=>{
         if(board[index[0]][index[1]]!==0&&((Math.abs(p[0]-index[0])==1&&Math.abs(p[1]-index[1])==2)||(Math.abs(p[0]-index[0])==2&&Math.abs(p[1]-index[1])==1)))
         {   if(flag==1)
                 board[index[0]][index[1]]=0
-            console.log("valid")
+            // console.log("valid")
             return 1;
         }
 
         return 0;
     }
 
-    function checkT(id,p,grid,flag=1){
+    function checkT(id,p,grid,flag=0){
         index=id;
         // printgr(grid)
-        console.log(index[0],index[1])
+        // console.log(index[0],index[1])
         if(grid[index[0]][index[1]]!==0&&((Math.abs(p[0]-index[0])==1&&Math.abs(p[1]-index[1])==2)||(Math.abs(p[0]-index[0])==2&&Math.abs(p[1]-index[1])==1)))
         {  if(flag==1)
             grid[index[0]][index[1]]=0
-            console.log("valid")
+            // console.log("valid")
             return 1;
         }
         return 0;
@@ -205,7 +232,7 @@ document.getElementById("hint").addEventListener("click",()=>{
        
         let id=[[i[0]-2,i[1]-1],[i[0]-2,i[1]+1],[i[0]+2,i[1]-1],[i[0]+2,i[1]+1],[i[0]-1,i[1]-2],[i[0]-1,i[1]+2],[i[0]+1,i[1]-2],[i[0]+1,i[1]+2]]
        id.forEach(element => {
-           console.log(i+" "+element)
+        //    console.log(i+" "+element)
 
            if((element[0]>=0&&element[0]<8)&&(element[1]>=0&&element[1]<8)&&checkT(element,i,grid,0))
               {
